@@ -1,10 +1,8 @@
-/** Customer for Lunchly */
-
+// require our DB file (outside of this folder) and our reservatin file(in the same folder)
 const db = require("../db");
 const Reservation = require("./reservation");
 
 /** Customer of the restaurant. */
-
 class Customer {
   constructor({ id, firstName, lastName, phone, notes }) {
     this.id = id;
@@ -15,7 +13,6 @@ class Customer {
   }
 
   /** find all customers. */
-
   static async all() {
     const results = await db.query(
       `SELECT id, 
@@ -30,7 +27,6 @@ class Customer {
   }
 
   /** get a customer by ID. */
-
   static async get(id) {
     const results = await db.query(
       `SELECT id, 
@@ -54,13 +50,11 @@ class Customer {
   }
 
   /** get all reservations for this customer. */
-
   async getReservations() {
     return await Reservation.getReservationsForCustomer(this.id);
   }
 
   /** save this customer. */
-
   async save() {
     if (this.id === undefined) {
       const result = await db.query(
@@ -78,6 +72,16 @@ class Customer {
       );
     }
   }
+
+  // function to return first and last names of customer joined by a space 
+  async fullName() {
+    try {
+      return `${this.firstName} ${this.lastName}`;
+    } catch(err) {
+      return next(err)
+    }
+  }
 }
 
+// export customer class to be used in other files
 module.exports = Customer;
